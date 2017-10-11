@@ -6,15 +6,13 @@ use PleskX\Api\Struct\Mail as Struct;
 
 class Mail extends \PleskX\Api\Operator
 {
-
     /**
      * @param string $name
-     * @param integer $siteId
-     * @param boolean $mailbox
-     * @param string $password
+     * @param int $siteId
+     * @param string $forwardAddress
      * @return Struct\Info
      */
-    public function create($name, $siteId, $mailbox = false, $password = '')
+    public function create(string $name, int $siteId, string $forwardAddress)
     {
         $packet = $this->_client->getPacket();
         $info = $packet->addChild($this->_wrapperTag)->addChild('create');
@@ -23,14 +21,13 @@ class Mail extends \PleskX\Api\Operator
         $filter->addChild('site-id', $siteId);
         $mailname = $filter->addChild('mailname');
         $mailname->addChild('name', $name);
-        if ($mailbox) {
-            $mailname->addChild('mailbox')->addChild('enabled', 'true');
-        }
-        if (!empty($password)) {
-            $mailname->addChild('password')->addChild('value', $password);
-        }
+
+        $forwarding = $mailname->addChild('forwarding');
+        $forwarding->addChild('enabled', 'true');
+        $forwarding->addChild('address', $forwardAddress);
 
         $response = $this->_client->request($packet);
+
         return new Struct\Info($response->mailname);
     }
 
