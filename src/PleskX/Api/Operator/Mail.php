@@ -12,7 +12,7 @@ class Mail extends \PleskX\Api\Operator
      * @param string $forwardAddress
      * @return Struct\Info
      */
-    public function create(string $name, int $siteId, string $forwardAddress)
+    public function create(string $name, int $siteId, string $forwardAddress): Struct\Info
     {
         $packet = $this->_client->getPacket();
         $info = $packet->addChild($this->_wrapperTag)->addChild('create');
@@ -54,7 +54,7 @@ class Mail extends \PleskX\Api\Operator
      * @param integer $siteId
      * @return bool
      */
-    public function delete($field, $value, $siteId)
+    public function delete($field, $value, $siteId): bool
     {
         $packet = $this->_client->getPacket();
         $filter = $packet->addChild($this->_wrapperTag)->addChild('remove')->addChild('filter');
