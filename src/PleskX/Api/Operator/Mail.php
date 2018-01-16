@@ -32,6 +32,23 @@ class Mail extends \PleskX\Api\Operator
     }
 
     /**
+     * @param int $siteId
+     * @return \PleskX\Api\XmlResponse
+     */
+    public function get(int $siteId)
+    {
+        $packet = $this->_client->getPacket();
+        $info = $packet->addChild($this->_wrapperTag)->addChild('get_info');
+        $filter = $info->addChild('filter');
+        $filter->addChild('site_id', $siteId);
+        $filter->addChild('forwarding', 'true');
+
+        $response = $this->_client->request($packet);
+
+        return $response;
+    }
+
+    /**
      * @param string $field
      * @param integer|string $value
      * @param integer $siteId
@@ -44,7 +61,7 @@ class Mail extends \PleskX\Api\Operator
         $filter->addChild('site-id', $siteId);
         $filter->addChild($field, $value);
         $response = $this->_client->request($packet);
+
         return 'ok' === (string)$response->status;
     }
-
 }
