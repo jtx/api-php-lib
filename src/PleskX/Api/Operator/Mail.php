@@ -2,6 +2,7 @@
 // Copyright 1999-2016. Parallels IP Holdings GmbH.
 
 namespace PleskX\Api\Operator;
+use PleskX\Api\Client;
 use PleskX\Api\Struct\Mail as Struct;
 
 class Mail extends \PleskX\Api\Operator
@@ -33,19 +34,24 @@ class Mail extends \PleskX\Api\Operator
 
     /**
      * @param int $siteId
-     * @return \PleskX\Api\XmlResponse
+     * @return array
      */
-    public function get(int $siteId)
+    public function get(int $siteId): array
     {
         $packet = $this->_client->getPacket();
         $info = $packet->addChild($this->_wrapperTag)->addChild('get_info');
         $filter = $info->addChild('filter');
-        $filter->addChild('site_id', $siteId);
-        $filter->addChild('forwarding', 'true');
+        $filter->addChild('site-id', $siteId);
+        $info->addChild('forwarding');
 
-        $response = $this->_client->request($packet);
+        $response = $this->_client->request($packet, Client::RESPONSE_FULL);
 
-        return $response;
+        $forwards = [];
+        foreach ($response->mail->get_info->result as $forwardInfo) {
+            $forwards[] = new Struct\Forwards($forwardInfo->mailname);
+        }
+
+        return $forwards;
     }
 
     /**
