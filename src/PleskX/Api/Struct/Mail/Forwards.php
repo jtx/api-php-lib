@@ -17,10 +17,15 @@ class Forwards extends \PleskX\Api\Struct
 
     /**
      * @param XmlResponse $apiResponse
+     * @return null|void
      * @throws \Exception
      */
     public function __construct(XMLResponse $apiResponse)
     {
+        if (!count($apiResponse)) {
+            return;
+        }
+
         $line = new \stdClass();
         $line->id = $apiResponse->id;
         $line->host = $apiResponse->name;
