@@ -10,10 +10,10 @@ class Forwards extends \PleskX\Api\Struct
     public $id;
 
     /** @var string */
-    public $name;
+    public $host;
 
     /** @var string */
-    public $address;
+    public $value;
 
     /**
      * @param XmlResponse $apiResponse
@@ -23,13 +23,13 @@ class Forwards extends \PleskX\Api\Struct
     {
         $line = new \stdClass();
         $line->id = $apiResponse->id;
-        $line->name = $apiResponse->name;
-        $line->address = $apiResponse->forwarding->address;
+        $line->host = $apiResponse->name;
+        $line->value = $apiResponse->forwarding->address;
 
         $this->_initScalarProperties($line, [
             'id',
-            'name',
-            'address',
+            'host',
+            'value',
         ]);
     }
 }
